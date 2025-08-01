@@ -5,6 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "BatcompAI",
   description: "Your advanced AI coding companion.",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
