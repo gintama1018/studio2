@@ -35,10 +35,14 @@ export function useVoice({ onTranscript }: UseVoiceProps) {
     recognition.onerror = (event) => {
       console.error("Speech recognition error", event.error);
       setIsListening(false);
+       let description = `Could not use voice recognition: ${event.error}`;
+       if (event.error === 'not-allowed') {
+         description = "Microphone permission was denied. Please allow microphone access in your browser settings to use voice commands.";
+       }
        toast({
         variant: "destructive",
         title: "Voice Error",
-        description: `Could not use voice recognition: ${event.error}`,
+        description: description,
       });
     };
 
@@ -50,7 +54,9 @@ export function useVoice({ onTranscript }: UseVoiceProps) {
     recognitionRef.current = recognition;
 
     return () => {
-      recognition.stop();
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
     };
   }, [onTranscript, toast]);
 
@@ -60,9 +66,16 @@ export function useVoice({ onTranscript }: UseVoiceProps) {
         recognitionRef.current.start();
       } catch (e) {
         console.error("Could not start recognition", e);
+        if (e instanceof Error && e.name === 'NotAllowedError') {
+            toast({
+                variant: "destructive",
+                title: "Voice Error",
+                description: "Microphone permission was denied. Please allow microphone access in your browser settings to use voice commands."
+            });
+        }
       }
     }
-  }, [isListening]);
+  }, [isListening, toast]);
 
   const stopListening = useCallback(() => {
     if (recognitionRef.current && isListening) {
