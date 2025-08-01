@@ -1,3 +1,5 @@
+import BatcompUI from "@/components/BatcompUI";
+
 export default function Home() {
-  return <></>;
+  return <BatcompUI />;
 }
