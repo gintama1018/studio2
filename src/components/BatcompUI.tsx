@@ -5,6 +5,7 @@ import type { Message, Mode } from "@/lib/types";
 import { generateCode } from "@/ai/flows/generate-code-from-description";
 import { provideContextAwareSuggestions } from "@/ai/flows/provide-context-aware-suggestions";
 import { adaptEmotionalTone } from "@/ai/flows/adapt-emotional-tone";
+import { chat } from "@/ai/flows/chat";
 import { useToast } from "@/hooks/use-toast";
 import { useVoice } from "@/hooks/use-voice";
 import { cn } from "@/lib/utils";
@@ -58,8 +59,8 @@ const BatcompUI = () => {
         aiResponse.suggestions = result.suggestions;
         aiResponse.code = `Documentation: \n${result.documentationLinks.join('\n')}\n\nGitHub: \n${result.githubLinks.join('\n')}`;
       } else { // chat mode
-        const result = await provideContextAwareSuggestions({ codeSnippet: '', programmingLanguage: 'any', query: input });
-        aiResponse.text = result.suggestions.join('\n');
+        const result = await chat({ message: input });
+        aiResponse.text = result.message;
       }
 
       if (isEmotionApiEnabled && options.emotion !== 'neutral') {
