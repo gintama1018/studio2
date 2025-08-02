@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { Message, Mode } from "@/lib/types";
 import { generateCode } from "@/ai/flows/generate-code-from-description";
 import { provideContextAwareSuggestions } from "@/ai/flows/provide-context-aware-suggestions";
@@ -14,6 +14,7 @@ import Header from "@/components/Header";
 import MessageList from "@/components/MessageList";
 import ControlPanel from "@/components/ControlPanel";
 import AudioPlayer from "@/components/AudioPlayer";
+import Image from "next/image";
 
 const BatcompUI = () => {
   const [mode, setMode] = useState<Mode>("chat");
@@ -135,30 +136,44 @@ const BatcompUI = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-background">
-       <AudioPlayer audioQueue={audioQueue} onPlaybackFinish={() => setAudioQueue(q => q.slice(1))} />
-      <Header
-        isVoiceEnabled={isVoiceEnabled}
-        onVoiceToggle={setIsVoiceEnabled}
-        isEmotionApiEnabled={isEmotionApiEnabled}
-        onEmotionApiToggle={setIsEmotionApiEnabled}
-      />
-      <main className="flex-1 overflow-hidden">
-        <MessageList messages={messages} />
-      </main>
-      <footer className={cn("border-t-2 border-primary/20 p-4 transition-shadow duration-500", modeGlowClass[mode])}>
-        <ControlPanel
-          isLoading={isLoading}
-          onSendMessage={handleSendMessage}
-          mode={mode}
-          onModeChange={handleModeChange}
-          isListening={isListening}
-          onListenToggle={isListening ? stopListening : startListening}
+    <div className="flex h-screen w-full bg-background">
+      <AudioPlayer audioQueue={audioQueue} onPlaybackFinish={() => setAudioQueue(q => q.slice(1))} />
+      <div className="flex flex-col flex-1">
+        <Header
+          isVoiceEnabled={isVoiceEnabled}
+          onVoiceToggle={setIsVoiceEnabled}
           isEmotionApiEnabled={isEmotionApiEnabled}
-          currentEmotion={currentEmotion}
-          onEmotionChange={setCurrentEmotion}
+          onEmotionApiToggle={setIsEmotionApiEnabled}
         />
-      </footer>
+        <main className="flex-1 overflow-hidden">
+          <MessageList messages={messages} />
+        </main>
+        <footer className={cn("border-t-2 border-primary/20 p-4 transition-shadow duration-500", modeGlowClass[mode])}>
+          <ControlPanel
+            isLoading={isLoading}
+            onSendMessage={handleSendMessage}
+            mode={mode}
+            onModeChange={handleModeChange}
+            isListening={isListening}
+            onListenToggle={isListening ? stopListening : startListening}
+            isEmotionApiEnabled={isEmotionApiEnabled}
+            currentEmotion={currentEmotion}
+            onEmotionChange={setCurrentEmotion}
+          />
+        </footer>
+      </div>
+      <div className="hidden lg:flex w-1/3 items-center justify-center p-8">
+        <div className="relative w-full h-full animate-float">
+            <Image 
+                src="https://placehold.co/600x800.png"
+                alt="Siya - Anime Assistant"
+                layout="fill"
+                objectFit="contain"
+                className="animate-glow"
+                data-ai-hint="anime girl"
+            />
+        </div>
+      </div>
     </div>
   );
 };
