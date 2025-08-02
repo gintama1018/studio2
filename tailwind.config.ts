@@ -12,7 +12,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['Space Grotesk', ...fontFamily.sans],
-        headline: ['Space Grotesk', ...fontFamily.sans],
+        headline: ['Orbitron', ...fontFamily.sans],
         code: ['monospace'],
       },
       colors: {

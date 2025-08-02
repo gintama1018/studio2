@@ -42,15 +42,15 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
               message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
             )}
           >
-            <Avatar className="holographic-glow">
-              <AvatarFallback className={cn(message.role === 'user' ? 'bg-accent' : 'bg-primary')}>
+            <Avatar className="holographic-glow border-2 border-primary/50">
+              <AvatarFallback className={cn(message.role === 'user' ? 'bg-accent text-accent-foreground' : 'bg-primary text-primary-foreground')}>
                 {message.role === "ai" ? <BatcompLogo className="h-6 w-6" /> : <User className="h-6 w-6"/>}
               </AvatarFallback>
             </Avatar>
             <div className={cn(
               "rounded-lg p-4 space-y-2 text-sm md:text-base",
               message.role === "user" 
-                ? "bg-accent/80 rounded-br-none" 
+                ? "bg-primary/80 text-primary-foreground rounded-br-none" 
                 : "bg-card rounded-bl-none border border-primary/20"
             )}>
               {message.text && <p className="whitespace-pre-wrap">{message.text}</p>}

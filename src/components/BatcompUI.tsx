@@ -6,12 +6,14 @@ import { generateCode } from "@/ai/flows/generate-code-from-description";
 import { provideContextAwareSuggestions } from "@/ai/flows/provide-context-aware-suggestions";
 import { adaptEmotionalTone } from "@/ai/flows/adapt-emotional-tone";
 import { chat } from "@/ai/flows/chat";
+import { textToSpeech } from "@/ai/flows/text-to-speech";
 import { useToast } from "@/hooks/use-toast";
 import { useVoice } from "@/hooks/use-voice";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import MessageList from "@/components/MessageList";
 import ControlPanel from "@/components/ControlPanel";
+import AudioPlayer from "@/components/AudioPlayer";
 
 const BatcompUI = () => {
   const [mode, setMode] = useState<Mode>("chat");
@@ -20,21 +22,37 @@ const BatcompUI = () => {
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
   const [isEmotionApiEnabled, setIsEmotionApiEnabled] = useState(false);
   const [currentEmotion, setCurrentEmotion] = useState("neutral");
+  const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const { toast } = useToast();
   
   const handleTranscript = useCallback((transcript: string) => {
     handleSendMessage(transcript, { emotion: currentEmotion });
   }, [currentEmotion]);
 
-  const { isListening, startListening, stopListening, speak } = useVoice({ onTranscript: handleTranscript });
+  const { isListening, startListening, stopListening } = useVoice({ onTranscript: handleTranscript });
 
   useEffect(() => {
     setMessages([{
       id: "0",
       role: "ai",
-      text: "Welcome to BatcompAI. Select a mode and ask me anything.",
+      text: "Welcome to Siya. Select a mode and ask me anything.",
     }]);
   }, []);
+
+  const speak = useCallback(async (text: string) => {
+    if (!text) return;
+    try {
+      const response = await textToSpeech(text);
+      setAudioQueue(prev => [...prev, response.audioDataUri]);
+    } catch (error) {
+      console.error("Error generating speech:", error);
+      toast({
+        variant: "destructive",
+        title: "Speech Error",
+        description: "Could not generate audio for the response.",
+      });
+    }
+  }, [toast]);
 
   const handleSendMessage = async (input: string, options: { emotion: string }) => {
     if (!input.trim()) return;
@@ -111,13 +129,14 @@ const BatcompUI = () => {
   };
 
   const modeGlowClass = {
-    coding: "shadow-[0_0_15px_2px_#8B5CF6]",
-    chat: "shadow-[0_0_15px_2px_#3B82F6]",
-    debug: "shadow-[0_0_15px_2px_#EC4899]",
+    coding: "shadow-[0_0_15px_2px_#FBBF24]", // gold
+    chat: "shadow-[0_0_15px_2px_#3B82F6]",   // blue
+    debug: "shadow-[0_0_15px_2px_#EC4899]",  // pink
   };
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
+       <AudioPlayer audioQueue={audioQueue} onPlaybackFinish={() => setAudioQueue(q => q.slice(1))} />
       <Header
         isVoiceEnabled={isVoiceEnabled}
         onVoiceToggle={setIsVoiceEnabled}

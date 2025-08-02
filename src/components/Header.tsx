@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-3">
         <BatcompLogo className="h-8 w-8 text-primary" />
         <h1 className="text-2xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent font-headline">
-          BatcompAI
+          Siya
         </h1>
       </div>
       <div className="flex items-center gap-6">

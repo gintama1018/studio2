@@ -66,7 +66,7 @@ export function useVoice({ onTranscript }: UseVoiceProps) {
         recognitionRef.current.start();
       } catch (e) {
         console.error("Could not start recognition", e);
-        if (e instanceof Error && e.name === 'NotAllowedError') {
+        if (e instanceof Error && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) {
             toast({
                 variant: "destructive",
                 title: "Voice Error",
@@ -83,14 +83,5 @@ export function useVoice({ onTranscript }: UseVoiceProps) {
     }
   }, [isListening]);
 
-  const speak = useCallback((text: string) => {
-    if ('speechSynthesis' in window && text) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "en-US";
-      window.speechSynthesis.speak(utterance);
-    }
-  }, []);
-
-  return { isListening, startListening, stopListening, speak };
+  return { isListening, startListening, stopListening };
 }
