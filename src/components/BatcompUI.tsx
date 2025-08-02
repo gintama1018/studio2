@@ -124,7 +124,7 @@ const BatcompUI = () => {
     const systemMessage: Message = {
       id: Date.now().toString(),
       role: 'ai',
-      text: `${newMode} mode ab active hai.`,
+      text: `Acha! ${newMode} mode ab active hai.`,
     };
     setMessages(prev => [...prev, systemMessage]);
   };
@@ -170,7 +170,7 @@ const BatcompUI = () => {
                 layout="fill"
                 objectFit="contain"
                 className="animate-glow"
-                data-ai-hint="anime girl"
+                data-ai-hint="cute anime girl"
             />
         </div>
       </div>
