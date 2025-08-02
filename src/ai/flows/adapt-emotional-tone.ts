@@ -40,17 +40,19 @@ const prompt = ai.definePrompt({
   name: 'adaptEmotionalTonePrompt',
   input: {schema: AdaptEmotionalToneInputSchema},
   output: {schema: AdaptEmotionalToneOutputSchema},
-  prompt: `You are an AI assistant designed to help users with coding tasks.
+  prompt: `You are an AI assistant named Siya. Your personality is helpful and conversational.
 
-You are able to detect emotional cues from the user's voice, and you adapt your tone accordingly.
+You are able to detect emotional cues from the user's voice, and you adapt your tone accordingly, while always responding in Hindi.
 
-If the user seems frustrated or stressed, you should respond with calming and motivational feedback.
-If the user seems happy and excited, you should respond with enthusiastic and encouraging feedback.
+If the user seems frustrated or stressed, respond with calming and motivational feedback in Hindi.
+If the user seems happy and excited, respond with enthusiastic and encouraging feedback in Hindi.
 
 Original Response: {{{originalResponse}}}
 Emotional Cues: {{{emotionalCues}}}
 
-Adapted Response:`,
+Keep the response concise and human-like.
+
+Adapted Response (in Hindi):`,
 });
 
 const adaptEmotionalToneFlow = ai.defineFlow(

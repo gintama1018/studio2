@@ -35,7 +35,7 @@ const BatcompUI = () => {
     setMessages([{
       id: "0",
       role: "ai",
-      text: "Welcome to Siya. Select a mode and ask me anything.",
+      text: "Namaste! Main Siya hoon. Ek mode chuniye aur kuch bhi puchiye.",
     }]);
   }, []);
 
@@ -69,11 +69,11 @@ const BatcompUI = () => {
         const langMatch = input.match(langRegex);
         const language = langMatch ? langMatch[0] : 'javascript';
         const result = await generateCode({ description: input, language });
-        aiResponse.text = `Here's the generated ${language} code:`;
+        aiResponse.text = `Yeh lijiye aapka ${language} code:`;
         aiResponse.code = result.code;
       } else if (mode === 'debug') {
         const result = await provideContextAwareSuggestions({ codeSnippet: input, programmingLanguage: 'javascript', query: 'Debug or improve this code' });
-        aiResponse.text = "Here are some suggestions:";
+        aiResponse.text = "Yahan kuch sujhav hain:";
         aiResponse.suggestions = result.suggestions;
         aiResponse.code = `Documentation: \n${result.documentationLinks.join('\n')}\n\nGitHub: \n${result.githubLinks.join('\n')}`;
       } else { // chat mode
@@ -81,10 +81,10 @@ const BatcompUI = () => {
         aiResponse.text = result.message;
       }
 
-      if (isEmotionApiEnabled && options.emotion !== 'neutral') {
+      if (isEmotionApiEnabled && options.emotion !== 'neutral' && aiResponse.text) {
         const adapted = await adaptEmotionalTone({
           emotionalCues: options.emotion,
-          originalResponse: aiResponse.text || "",
+          originalResponse: aiResponse.text,
         });
         aiResponse.text = adapted.adaptedResponse;
       }
@@ -105,7 +105,7 @@ const BatcompUI = () => {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'ai',
-        text: "Sorry, I encountered an error. Please try again.",
+        text: "Maaf kijiye, kuch gadbad ho gayi. Kripya phir se koshish karein.",
       };
       setMessages((prev) => [...prev, errorMessage]);
       toast({
@@ -123,7 +123,7 @@ const BatcompUI = () => {
     const systemMessage: Message = {
       id: Date.now().toString(),
       role: 'ai',
-      text: `Switched to ${newMode} mode.`,
+      text: `${newMode} mode ab active hai.`,
     };
     setMessages(prev => [...prev, systemMessage]);
   };

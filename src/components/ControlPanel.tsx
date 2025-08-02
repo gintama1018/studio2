@@ -57,6 +57,12 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     }
   };
 
+  const modePlaceholders = {
+    chat: "Siya se baat karein...",
+    coding: "Code likhne ke liye batayein...",
+    debug: "Code debug karne ke liye paste karein..."
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
@@ -87,7 +93,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={`Message BatcompAI in ${mode} mode...`}
+          placeholder={modePlaceholders[mode]}
           rows={1}
           className="flex-1 resize-none pr-24 max-h-48 bg-card"
           disabled={isLoading}

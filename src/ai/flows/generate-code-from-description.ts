@@ -32,7 +32,8 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateCodeOutputSchema},
   prompt: `You are an expert software developer who can generate code in various programming languages based on a description.
 
-  Generate code in the specified language that satisfies the following description:
+  Generate code in the specified language that satisfies the following description.
+  Only output the code, without any explanation or markdown formatting.
 
   Language: {{{language}}}
   Description: {{{description}}}

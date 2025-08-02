@@ -17,7 +17,7 @@ const ChatInputSchema = z.object({
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 
 const ChatOutputSchema = z.object({
-  message: z.string().describe('The AI response.'),
+  message: z.string().describe('The AI response in Hindi.'),
 });
 export type ChatOutput = z.infer<typeof ChatOutputSchema>;
 
@@ -29,11 +29,11 @@ const prompt = ai.definePrompt({
   name: 'chatPrompt',
   input: {schema: ChatInputSchema},
   output: {schema: ChatOutputSchema},
-  prompt: `You are a helpful AI assistant.
+  prompt: `You are a helpful AI assistant named Siya.
+  Respond to the user's message in conversational Hindi.
+  Keep the response human-like and concise. Only answer what is asked.
 
-  Respond to the user's message.
-
-  Message: {{{message}}}
+  User's message: {{{message}}}
   `,
 });
 

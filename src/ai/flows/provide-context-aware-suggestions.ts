@@ -27,7 +27,7 @@ export type ProvideContextAwareSuggestionsInput = z.infer<
 const ProvideContextAwareSuggestionsOutputSchema = z.object({
   suggestions: z
     .array(z.string())
-    .describe('An array of context-aware coding suggestions.'),
+    .describe('An array of context-aware coding suggestions in concise language.'),
   documentationLinks: z
     .array(z.string())
     .describe('Links to official documentation relevant to the suggestions.'),
@@ -51,7 +51,7 @@ const prompt = ai.definePrompt({
   output: {schema: ProvideContextAwareSuggestionsOutputSchema},
   prompt: `You are an AI expert in providing context-aware coding suggestions.
 
-  Based on the provided code snippet, programming language, and coding problem/question, provide relevant and accurate coding suggestions.
+  Based on the provided code snippet, programming language, and coding problem/question, provide relevant and accurate coding suggestions. The suggestions should be concise.
 
   Also, include links to official documentation and GitHub repositories that can help the user understand the suggestions and implement them correctly.
 
