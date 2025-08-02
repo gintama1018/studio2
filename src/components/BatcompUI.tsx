@@ -28,7 +28,7 @@ const BatcompUI = () => {
   
   const handleTranscript = useCallback((transcript: string) => {
     handleSendMessage(transcript, { emotion: currentEmotion });
-  }, [currentEmotion]);
+  }, [currentEmotion, isEmotionApiEnabled]);
 
   const { isListening, startListening, stopListening } = useVoice({ onTranscript: handleTranscript });
 
@@ -41,7 +41,7 @@ const BatcompUI = () => {
   }, []);
 
   const speak = useCallback(async (text: string) => {
-    if (!text) return;
+    if (!text || !isVoiceEnabled) return;
     try {
       const response = await textToSpeech(text);
       setAudioQueue(prev => [...prev, response.audioDataUri]);
@@ -53,7 +53,7 @@ const BatcompUI = () => {
         description: "Could not generate audio for the response.",
       });
     }
-  }, [toast]);
+  }, [toast, isVoiceEnabled]);
 
   const handleSendMessage = async (input: string, options: { emotion: string }) => {
     if (!input.trim()) return;
@@ -98,7 +98,7 @@ const BatcompUI = () => {
 
       setMessages((prev) => [...prev, finalAiMessage]);
 
-      if (isVoiceEnabled && finalAiMessage.text) {
+      if (finalAiMessage.text) {
         speak(finalAiMessage.text);
       }
     } catch (error) {
