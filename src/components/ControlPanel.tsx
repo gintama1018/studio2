@@ -1,36 +1,23 @@
 "use client";
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
-import type { Mode } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Mic, BrainCircuit, Code, Bug, Loader } from "lucide-react";
+import { Send, Mic, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ControlPanelProps {
   isLoading: boolean;
-  onSendMessage: (message: string, options: { emotion: string }) => void;
-  mode: Mode;
-  onModeChange: (mode: Mode) => void;
+  onSendMessage: (message: string) => void;
   isListening: boolean;
   onListenToggle: () => void;
-  isEmotionApiEnabled: boolean;
-  currentEmotion: string;
-  onEmotionChange: (emotion: string) => void;
 }
 
 const ControlPanel: React.FC<ControlPanelProps> = ({
   isLoading,
   onSendMessage,
-  mode,
-  onModeChange,
   isListening,
   onListenToggle,
-  isEmotionApiEnabled,
-  currentEmotion,
-  onEmotionChange,
 }) => {
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -45,7 +32,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 
   const handleSend = () => {
     if (input.trim()) {
-      onSendMessage(input, { emotion: currentEmotion });
+      onSendMessage(input);
       setInput("");
     }
   };
@@ -57,43 +44,15 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     }
   };
 
-  const modePlaceholders = {
-    chat: "Siya se baat karein...",
-    coding: "Code likhne ke liye batayein...",
-    debug: "Code debug karne ke liye paste karein..."
-  }
-
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <Tabs value={mode} onValueChange={(value) => onModeChange(value as Mode)} className="w-auto">
-          <TabsList className="holographic-glow">
-            <TabsTrigger value="chat"><BrainCircuit className="w-4 h-4 mr-2" />Chat</TabsTrigger>
-            <TabsTrigger value="coding"><Code className="w-4 h-4 mr-2" />Coding</TabsTrigger>
-            <TabsTrigger value="debug"><Bug className="w-4 h-4 mr-2" />Debug</TabsTrigger>
-          </TabsList>
-        </Tabs>
-        {isEmotionApiEnabled && (
-          <Select value={currentEmotion} onValueChange={onEmotionChange}>
-            <SelectTrigger className="w-[180px] holographic-glow">
-              <SelectValue placeholder="Select Emotion" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="neutral">Neutral</SelectItem>
-              <SelectItem value="frustrated">Frustrated</SelectItem>
-              <SelectItem value="happy">Happy</SelectItem>
-            </SelectContent>
-          </Select>
-        )}
-      </div>
-
       <div className="relative flex items-end gap-2">
         <Textarea
           ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={modePlaceholders[mode]}
+          placeholder="Niva se baat karein..."
           rows={1}
           className="flex-1 resize-none pr-24 max-h-48 bg-card"
           disabled={isLoading}
