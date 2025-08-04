@@ -1,4 +1,4 @@
-export type Mode = "chat" | "coding" | "debug";
+export type Mode = "chat";
 
 export interface Message {
   id: string;
